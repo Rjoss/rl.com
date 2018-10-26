@@ -1,0 +1,24 @@
+
+dl {
+  margin-left: map-get($grid, sides)
+}
+
+dt {
+  font-weight: 600;
+}
+
+dd {
+  display: inline;
+  margin: (map-get($scale0, line) / 2) 0;
+  font-family: monospace;
+
+  &::after {
+    content: "+";
+    display: inline-block;
+    padding: 0 8px;
+  }
+
+  &:last-of-type::after {
+    display: none;
+  }
+}

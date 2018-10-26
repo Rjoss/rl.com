@@ -1,0 +1,464 @@
+$font-stack: "Helvetica Neue LT", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-size-base: 1em;
+
+$settings: ();
+
+// $colors: (
+//   white: #fff,
+//   offwhite: #f9f9f9,
+//   black: #222,
+//   grey: #444,
+//   blue: #0000a9,
+//   green: #d7ff49,
+//   teal: #00ffd0,
+//   gradient: linear-gradient(180deg, #fff, #ddd)
+// );
+
+$colors: (
+  white: #fff,
+  offwhite: #f9f9f9,
+  black: #222,
+  grey: #444,
+  blue: #292944,
+  green: #2aec00,
+  teal: #b76e13,
+  gradient: linear-gradient(180deg, #fff, #ddd)
+);
+
+$theme: (
+  primary: map-get($colors, blue),
+  accent: map-get($colors, green),
+  complement: map-get($colors, teal),
+  highlight: map-get($colors, green),
+  headline: map-get($colors, black),
+  richtext: map-get($colors, grey),
+  background-body: map-get($colors, gradient)
+);
+
+$shadows: (
+  primary: map-get($colors, white),
+  contrast: map-get($theme, accent)
+);
+
+$grid: (
+  article: 60vw,
+  gutter: 8px,
+  sides: 68px
+);
+
+// shortcuts
+// gutters
+$gutter: map-get($grid, gutter);
+
+// shadows
+$contrast-shadow: 4px 1px 0px rgba(map-get($shadows, contrast), 0.75);
+$primary-shadow: -4px 1px 0px rgba(map-get($shadows, primary), 0.65);
+
+// merge into settings!
+$settings: map-merge($colors, $theme);
+
+@mixin outputMap ($map) {
+  @each $key, $val in $map {
+    // --color-#{$key}: #{$val};
+    --g-#{$key}: #{$val};
+  }
+}
+
+@mixin counter ($name) {
+  &::before {
+    counter-increment: #{$name};
+    display: inline-block;
+    color: map-get($theme, primary);
+    content: counter(#{$name});
+  }
+}
+
+@mixin textShadow () {
+  text-shadow: $primary-shadow, $contrast-shadow;
+};
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+%inlineHighlighterFX {
+  display: inline;
+  -webkit-box-decoration-break: clone;
+}
+
+// export settings to document
+:root {
+  @include outputMap($settings);
+}
+
+html {
+  font-size: map-get($root, fontSize);
+  line-height: map-get($root, lineHeight);
+
+  @media screen and (max-width: 400px) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+  }
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: map-get($scale0, fontSize);
+  line-height: map-get($scale0, line);
+  font-family: $font-stack;
+  // background: var(--g-background-body);
+}
+
+a, a:visited, a:hover {
+  color: map-get($theme, primary);
+}
+
+::selection {
+  // background: map-get($theme, highlight);
+  // background: rgba(map-get($theme, accent), 0.4);
+  background: complement($color: map-get($theme, accent));
+}
+
+// header
+.header {
+  display: flex;
+  background: #f9f9f9;
+
+  .profile, .navigation {
+    display: inline-flex;
+    justify-self: center;
+  }
+}
+
+.profile {
+  a, a:visited, a:hover {
+    color: #fff;
+  }
+}
+
+.profile__logo {
+  width: map-get($grid, sides);
+  padding: $gutter * 2;
+  background: map-get($theme, primary);
+  color: map-get($colors, white);
+  text-align: center;
+}
+
+// page specific entry
+
+// home page
+.main__index {
+  padding: (map-get($scale0, line) * 3) map-get($grid, sides) 0;
+
+  .entry {
+    margin: 0 0 (map-get($scale0, line) * 6);
+  }
+
+  .entry__title {
+    @include counter(entry);
+    display: flex;
+    align-items: flex-end;
+
+    .entry__link {
+      display: inline-flex;
+    }
+  }
+
+  .entry__title::before {
+    display: inline-flex;
+    text-align: center;
+    padding-left: 24px;
+    padding-right: 24px;
+    color: map-get($theme, primary);
+    background: map-get($colors, offwhite);
+  }
+
+  .entry__summary {
+    display: block;
+    max-width: 45vw;
+
+    .entry__link {
+      display: inline;
+      padding: 0 $gutter;
+      background: map-get($theme, primary);
+      color: map-get($colors, white);
+    }
+  }
+}
+
+// post page
+.main__post {
+  width: map-get($grid, article);
+
+  .entry {
+    margin-bottom: map-get($scale0, line);
+  }
+
+  .entry__title, .entry__summary {
+    display: inline;
+    margin: 0;
+    padding: 0 ($gutter * 3) 0 map-get($grid, sides);
+    -webkit-box-decoration-break: clone;
+  }
+
+  .entry__title {
+    background: map-get($theme, primary);
+    color: #fff;
+    line-height: 4.94rem;
+  }
+
+  .entry__summary {
+    padding-top: $gutter / 2;
+    padding-bottom: $gutter / 2;
+    background: map-get($theme, accent);
+    color: map-get($theme, headline);
+    line-height: 0;
+    vertical-align: baseline;
+  }
+}
+
+.entry__index {
+  counter-reset: entry;
+
+  li:first-of-type .entry__title {
+    margin-top: 0;
+  }
+
+  > li:last-of-type .entry {
+    margin-bottom: 0;
+  }
+}
+
+// entry
+.entry {
+  a, a:visited, a:hover {
+    color: inherit;
+  }
+}
+
+.entry__link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.entry__title {
+  margin: map-get($scale3, line) 0;
+  font-size: map-get($scale3, fontSize);
+  line-height: map-get($scale3, autoLineHeight);
+  color: map-get($theme, headline);
+}
+
+.entry__summary {
+  @extend %inlineHighlighterFX;
+  line-height: 124%;
+}
+
+// tagging
+.tag__index {
+  display: flex;
+
+  .tag {
+    min-width: 31px;
+    text-align: center;
+    padding: $gutter;
+    margin-right: $gutter / 2;
+    font-size: 0.68em;
+    background: shade(map-get($theme, primary), 46%);
+    color: #fff;
+  }
+
+  a.tag, a.tag:visited, a.tag:hover {
+    color: #fff;
+  }
+
+  li:last-of-type .tag {
+    margin-right: 0;
+  }
+}
+
+// footer
+.footer__nav {
+
+  ul {
+    display: flex;
+  }
+
+  li {
+    display: inline-flex;
+    justify-self: center;
+  }
+}
+
+.footer__nav__link {
+  padding: $gutter * 2;
+  background: map-get($theme, primary);
+  color: #fff;
+}
+
+// richtexts
+.richtext {
+
+
+  h1 {
+    margin: map-get($scale3, line) 0;
+    font-size: map-get($scale3, fontSize);
+    line-height: map-get($scale3, autoLineHeight);
+  }
+
+  h2 {
+    margin: map-get($scale2, line) 0;
+    font-size: map-get($scale2, fontSize);
+    line-height: map-get($scale2, autoLineHeight);
+    @include textShadow();
+
+    &::before {
+      content: " ";
+      background: map-get($shadows, contrast);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 38%;
+      height: 100%;
+      z-index: -1;
+    }
+  }
+
+  h3 {
+    margin: map-get($scale1, line) 0 0;
+    font-size: map-get($scale1, fontSize);
+    line-height: map-get($scale1, autoLineHeight);
+  }
+
+  h4 {
+    margin: map-get($scale0, line) 0 0;
+    font-size: map-get($scale0, fontSize);
+    line-height: map-get($scale0, autoLineHeight);
+  }
+
+  h1, h2, h3, h4 {
+    position: relative;
+    padding-left: map-get($grid, sides);
+    color: map-get($theme, primary);
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 map-get($scale0, line);
+    padding: 0 0 0 map-get($grid, sides);
+  }
+
+  a {
+    padding: $gutter / 2;
+    background: map-get($theme, accent);
+    text-decoration: none;
+  }
+
+
+
+  ul, ol {
+    list-style-type: none;
+
+    li {
+      padding-left: map-get($grid, sides);
+      margin: (map-get($scale0, line) / 2) 0;
+    }
+
+    li::before {
+      display: inline-block;
+      margin-right: $gutter * 3;
+    }
+  }
+
+  ul li::before {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-top: map-get($root, fontSize) solid map-get($theme, primary);
+    border-left: map-get($root, fontSize) solid transparent;
+  }
+
+  ol {
+    counter-reset: ol;
+  }
+
+  ol li::before {
+    content: counter(ol);
+    counter-increment: ol;
+    font-size: map-get($scale1, line);
+    font-weight: 600;
+    color: map-get($theme, primary);
+  }
+
+  ol > ol {
+  margin-left: 40px;
+  // counter-reset: olNested;
+  }
+
+  ol > ol li::before {
+      content: " ";
+      width: 0;
+      height: 0;
+      border-top: 18px solid map-get($theme, primary);
+      border-left: 18px solid #0000;
+    // content: counter(olNested, square);
+    // counter-increment: olNested;
+  }
+}
+
+.highlight--accent {
+  padding: 2px ($gutter / 2);
+  background: map-get($theme, accent);
+}
+
+.syntax {
+  position: relative;
+  margin: map-get($scale0, line) 0 map-get($scale0, line) map-get($grid, sides);
+  background: #202020;
+  // box-shadow: 10px 10px 0 0 #000;
+
+  pre {
+    padding: $gutter * 2 0;
+  }
+
+  &::before {
+    content: " ";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: $gutter;
+    left: $gutter;
+    z-index: -1;
+    background: linear-gradient(190deg, map-get($theme, accent), map-get($theme, complement), #202020);
+  }
+
+  // curl fx
+  // &::before, &::after {
+  //   content: '';
+  //   z-index: -1;
+  //   position: absolute;
+  //   left: 10px;
+  //   bottom: 15px;
+  //   width: 70%;
+  //   max-width: 300px;
+  //   max-height: 100px;
+  //   height: 55%;
+  //   -webkit-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  //   -moz-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  //   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  //   -webkit-transform: skew(-15deg) rotate(-6deg);
+  //   -moz-transform: skew(-15deg) rotate(-6deg);
+  //   -ms-transform: skew(-15deg) rotate(-6deg);
+  //   -o-transform: skew(-15deg) rotate(-6deg);
+  //   transform: skew(-15deg) rotate(-6deg);
+  // }
+}

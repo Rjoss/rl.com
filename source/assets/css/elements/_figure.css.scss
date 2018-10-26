@@ -1,0 +1,56 @@
+.figure {
+  margin: map-get($scale0, line) 0;
+}
+
+.figure__img {
+  display: block;
+  background: map-get($colors, offwhite);
+  box-shadow: 6px 6px 4px -3px rgba(#000, 0.28);
+}
+
+.figure__caption {
+  position: relative;
+  padding: (map-get($scale0, line) / 2);
+  margin: 0 0 map-get($scale0, line);
+
+  &::after {
+    content: "";
+    display: block;
+    padding-left: map-get($grid, sides);
+    width: 10%;
+    height: 2px;
+    background: map-get($theme, primary);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+.figure--outside {
+  $articleRemainer: 100 - map-get($grid, article);
+  float: right;
+  padding-left: $gutter * 4;
+  margin-right: ($articleRemainer * -1);
+  max-width: ($articleRemainer / 1.5);
+}
+
+.figure--outside .figure__caption {
+  font-size: map-get($scale0, fontSize) * 0.94;
+  line-height: map-get($scale0, line) * 0.94;
+  font-style: italic;
+}
+
+
+
+// .figure::before {
+//   content: "";
+//   display: block;
+//   width: 100%;
+//   height: 100%;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   background-image: linear-gradient(0deg, map-get($theme, primary), map-get($theme, primary));
+//   mix-blend-mode: screen;
+//   z-index: 2;
+// }

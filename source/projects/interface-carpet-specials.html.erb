@@ -1,0 +1,227 @@
+---
+layout: "layout"
+title: "Entry"
+---
+
+<% content_for :page_stylesheet do %>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/brands.css" integrity="sha384-Px1uYmw7+bCkOsNAiAV5nxGKJ0Ixn5nChyW8lCK1Li1ic9nbO5pC/iXaq27X5ENt" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/fontawesome.css" integrity="sha384-BzCy2fixOYd0HObpx3GMefNqdbA7Qjcc91RgYeDjrHTIEXqiF00jKvgQG0+zY/7I" crossorigin="anonymous">
+<% end %>
+
+<% content_for :page_javascript do %>
+  <%= javascript_include_tag 'application' %>
+<% end %>
+
+<% @project = data.projects[0] %>
+
+<% content_for :page_meta do %>
+  <title>RL Projects: <%= @project.project %></title>
+  <!-- <meta name="description" content=""> -->
+  <!-- <meta name="image" content=""> -->
+  <!-- <meta name="robots" content="noindex,nofollow"> -->
+<% end %>
+
+<%= partial "partials/header" %>
+
+<article class="main__post">
+  <div class="entry">
+    <header>
+      <h1 class="entry__title">
+        <%= @project.client %> <%= @project.project %>
+      </h1>
+    </header>
+
+    <p class="entry__summary">Interface is global leader in the flooring industry offering carpet and laminate products for a broad spectrum of clients.</p>
+  </div>
+
+  <section class="richtext">
+    <p>My Roles and Activities in this project</p>
+    <dl>
+      <dt>Front End Development</dt>
+      <dd>SASS</dd>
+      <dd>HTML5 / ERB templates</dd>
+      <dd>Javascript / Backbone.js MVP framework</dd>
+      <dd>Realtime Database</dd>
+      <dd>Node REST API</dd>
+      <dd>Generative Dynamic Assets</dd>
+
+      <dt>UI Design</dt>
+      <dd>Component UI Design</dd>
+
+      <dt>UX Research</dt>
+      <dd>Persona Development</dd>
+      <dd>User Journey Mapping</dd>
+      <dd>User Interviews</dd>
+    </dl>
+
+    <h2>The Problem</h2>
+    <p>Interface’s approach to excess inventory traditionally involved spreadsheets, telephones and fax machines, all manned by one person. As this inventory takes valuable space a need emerged to move this inventory in a more quick and efficient manner. Interface created a program called Carpet Specials to handle the quick sell of these inventories.</p>
+
+    <p>This problem presents the perfect opportunity to leverage some agile web app tools! </p>
+
+    <h2>Approach</h2>
+    <p>Before writing any code, we need to consider the larger goals in context to the employees, end users, and business.</p>
+
+    <figure class="figure figure--outside">
+      <%= image_tag  "figure-stakeholders.png", :class => "figure__img" %>
+      <figcaption class="figure__caption">
+        We don't always think of the client team as a stakeholder, but their acceptance of the experice is just as important.
+      </figcaption>
+    </figure>
+
+    <h4>Business Goals</h4>
+    <ul>
+      <li>Expose dynamically changing inventory to digital audience</li>
+      <li>Clarify and simplify inventory business rules </li>
+      <li>Handle multiple inventory requests </li>
+    </ul>
+
+    <h4>Team Goals</h4>
+    <ul>
+      <li>Easy to use UI to manage product inventory </li>
+      <li>Preview content before publishing and roll back to older content if needed</li>
+      <li>Reduce phone calls about standard information like quantity available, shipping, and returns</li>
+    </ul>
+
+    <h4>End User Goals</h4>
+    <ul>
+      <li>Quickly discover new products</li>
+      <li>Find a product based on specs</li>
+      <li>See quantities available</li>
+      <li>Easily contact customer support</li>
+    </ul>
+
+    <h2>Challenges</h2>
+    <p>We also consider the challenges to better design the experience.</p>
+
+    <figure class="figure figure--outside">
+      <%= image_tag  "figure-data.png", :class => "figure__img" %>
+      <figcaption class="figure__caption">
+        Its almost like person is the API...
+      </figcaption>
+    </figure>
+
+    <h4>Data</h4>
+    <p>The data we’d be using was coming from an older product data management system, which provides a lowly .csv file as the primary source to all product data. On top of that, the PDM system is known for exporting data found to be slightly inaccurate or in an outdated format. Lastly, we rely solely on humans to move this data from one system to another - no API interface to automate from.</p>
+
+    <h4>Internal Users</h4>
+    <p>The Carpet Specials team is small and slightly experienced with modern web interfaces. However any lack of
+      modern tool experience is made up for by the teams ever positive and eager attitude towards a digital solution.</p>
+
+    <h4>Budget</h4>
+    <p>The budget sets a tight scope on the implementation. While more thorough solutions exist to the needs and
+      challenges, this project will need to prove its worth before unlocking any serious resources.</p>
+
+    <h2>Solutions</h2>
+    <p>The scope is clear, stakeholders are identified, and challenges flagged. The framework solution comes in to
+      place starting with the data.</p>
+
+    <h4>Data Architecture</h4>
+    <p>Moving the data somewhere were we could easily modify, access, and store would be the first priority. Initially
+      Microsoft Azure offered the best approach with it’s “Web Job” capability paired with hosting, storage, and
+      monitoring. Azure would eventually be swapped for Google’s Firebase, with a nearly identical feature set but more
+      developers tools and a friendlier interface. </p>
+
+    <figure class="figure">
+      <%= image_tag  "figure-architecture.png", :class => "figure__img" %>
+      <figcaption class="figure__caption">
+        Centralizing the complexity.
+      </figcaption>
+    </figure>
+
+    <p>With the data source established, an import process was created using Firebase Functions:</p>
+
+    <ol>
+      <li>Receive the .csv</li>
+      <li>Transform to json</li>
+      <li>Sanitize and format data</li>
+      <li>Update legacy data</li>
+      <li>Insert fresh product collection into staging store</li>
+    </ol>
+
+    <p>Creating granular "checkpoints” via Firebase Functions allowed on the fly tweaking of the unpredictable source
+      data. New data inaccuracies could be easily caught and tied in to the sanitization process.</p>
+
+    <h4>Data Interactions</h4>
+    <p>The Admin panel was custom crafted to allow easy modification of the processed data.</p>
+
+    <figure class="figure">
+      <%= image_tag  "figure-admin.png", :class => "figure__img" %>
+      <figcaption class="figure__caption">
+        Carpet Specials team members use the admin for managing the site.
+      </figcaption>
+    </figure>
+
+    <p>A common workflow looks like this:</p>
+    <ol>
+      <li>upload .csv</li>
+      <li>identify missing data</li>
+      <ol>
+        <li>add missing data and re-run</li>
+      </ol>
+      <li>tag products with colors for sorting and filtering</li>
+      <li>publish the product collection</li>
+    </ol>
+
+    <p>To handle data issue with the .csv upload, a custom status log tied into the Firebase Functions notifies the
+      team exactly whats happening. If there are issues with the data, an informative status and message are returned.</p>
+
+    <p>Custom tag management happens through a parallel Firebase Store that tracks and updates color tags as team
+      members introduce new variants. On the data side, products are dynamically associated with colors allowing real
+      time filter updates for end users.</p>
+
+    <p>Transitioning a product data collection from draft to public is a single click action from the admin interface.
+      If something doesn’t look right, the team can easily rollback to any previous iteration with in in-context select
+      action.</p>
+
+    <h4>End User Experience</h4>
+    <p>On the end user side of things, the discount product inventory presents as a simple product collection with
+      detail view.</p>
+
+    <figure class="figure">
+      <%= image_tag  "figure-home.png", :class => "figure__img" %>
+      <figcaption class="figure__caption">
+        The end user's home page.
+      </figcaption>
+    </figure>
+
+    <p>A user workflow looks like this:</p>
+    <ol>
+      <li>browse the product collection</li>
+      <li>select a product</li>
+      <li>view inventory</li>
+      <ol>
+        <li>order sample</li>
+        <li>reserve Dyelots</li>
+      </ol>
+    </ol>
+
+    <p>Most of the users are looking for products that fit an existing job’s parameters. The filter bar allows a user
+      to quickly discover a match that works.</p>
+
+    <p>The most complex but perhaps subtle constraint of a product selection is product Dyelot. Products that were all produced on the same manufacturing run create a Dyelot. A main outcome of the run is a distinct color variant of the run. The same product from different Dyelots may appear visually different in color ever so slightly. End users mainly are looking for a Dyelot quantity that fits their project need. The Carpet Specials site easily accommodates this nuance via Firebase Functions data modifications, fulfilling a key goal in reducing repetitive tasks.</p>
+
+    <figure class="figure">
+      <%= image_tag  "figure-home-order.png", :class => "figure__img" %>
+      <figcaption class="figure__caption">
+        Specifying a Dyelot is made simple.
+      </figcaption>
+    </figure>
+
+    <p>Requesting a product quantity is as easy as filling out a form. If you are an existing Interface customer, custom Eloqua data integrations allow field auto population, making repeat requests a breeze.</p>
+
+    <h2>Outcome</h2>
+    <p>Carpet Specials launched as a continuous integration site, with user and team feedback lighting the path forward. Since launch, site performance and order analytics prove out strong audience engagement and customer satisfaction. System adoption is easy for client team members and a tailing support initiative allows for improvements, pain points, and new feature requests to distill into the site. </p>
+
+    <p>In light of the overall sales success, business approved a round 2 expansion.</p>
+
+    <h4>Numbers</h4>
+    <ul>
+      <li>Digital sample requests for the reporting time period: <span class="highlight--accent">2498</span>.</li>
+      <li>Digital requests for quantity for the reporting time period: <span class="highlight--accent">49,705 sq. yds</span>.</li>
+      <li>Long sessions - average session duration <span class="highlight--accent">7 minutes</span>.</li>
+    </ul>
+  </section>
+</article>
+
+
