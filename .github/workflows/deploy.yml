@@ -1,0 +1,61 @@
+name: deploy-prodution
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [production]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  PATH_REPO: ./build/
+  PATH_SERVER: ./${{ secrets.VT_PATH }}
+  PATH_ENV_PROD: ./.env.production
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # The branch, tag or SHA to checkout. When checking out the repository that
+          # triggered a workflow, this defaults to the reference or SHA for that event.
+          # Otherwise, defaults to `master`.
+          ref: 'production'
+
+      - name: Reset and add envs
+        run: |
+          > $PATH_ENV_PROD
+          echo "REACT_APP_GITHUB_REF='$GITHUB_REF'"           >> $PATH_ENV_PROD
+          echo "REACT_APP_GITHUB_REF_NAME='$GITHUB_REF_NAME'" >> $PATH_ENV_PROD
+          echo "REACT_APP_GITHUB_RUN_ID='$GITHUB_RUN_ID'"     >> $PATH_ENV_PROD
+          echo "REACT_APP_GITHUB_SHA='$GITHUB_SHA'"           >> $PATH_ENV_PROD
+          echo "REACT_APP_GITHUB_NOW='$(date +'%Y-%m-%d T%H:%M:%S %Z')'" >> $PATH_ENV_PROD
+          cat $PATH_ENV_PROD
+
+      - name: Use Node 16 LTS
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.15.0
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.VT_SSH_PRIVATE_KEY }}
+          known_hosts: 'placeholder-so-we-dont-get-errors'
+
+      - name: Adding Known Hosts
+        run: echo ${{ secrets.VT_KNOWN_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy with rsync
+        run: rsync -avz -e "ssh -p ${{ secrets.VT_PORT }}" $PATH_REPO ${{ secrets.VT_USER }}@${{ secrets.VT_HOSTNAME }}:$PATH_SERVER
