@@ -1,0 +1,205 @@
+:root {
+  font-size: 16px;
+
+  /* font smoothing */
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+
+  /* font family */
+  --font-fam-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-fam-default: 'IBM Plex Mono', Menlo, monospace;
+  --font-weight-light: 200;
+  --font-weight-medium: 500;
+
+  /* colors */
+  --color-background-rgb: 0, 0, 0;
+  --color-font-rgb: 255, 255, 255;
+  /* --color-font-accent-rgb: 191, 70, 251; */
+  --color-font-accent-rgb: 11, 115, 113;
+  /* --color-font-accent-rgb: 19, 103, 191; */
+
+  /* text decoration */
+  --text-decoration-thickness: 1;
+  --text-decoration-opacity: 0.8;
+}
+
+::selection {
+  text-shadow: 2px 2px 1px rgb(var(--color-font-accent-rgb));
+  background-color: #725f00;
+}
+
+/* energy */
+@-webkit-keyframes fx-energy {
+  50% {
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+@keyframes fx-energy {
+  50% {
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+
+.fx-energy {
+  position: relative;
+}
+
+.fx-energy::after {
+  display: inline-block;
+  content: '';
+  width: 100%;
+  height: 4px;
+  border-bottom: 1px dotted rgba(var(--color-font-accent-rgb), 0.5);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: perspective(1px) translateZ(0);
+}
+
+.fx-energy:hover::after {
+  border-bottom-color: rgba(var(--color-font-accent-rgb), 1);
+}
+
+.fx-energy::after {
+  animation-name: fx-energy;
+  animation-duration: 0.15s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* anti FOUC as we wait for google fonts */
+.font-loading body {
+  font-size: calc((16 / 16) * 1rem);
+  line-height: 1.6;
+  font-weight: 100;
+  letter-spacing: -0.05px;
+  word-spacing: 0.1px;
+  color: rgba(var(--color-font-rgb), 0.95);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-fam-base);
+  font-family: var(--font-fam-default);
+  background: rgb(var(--color-background-rgb));
+  color: rgb(var(--color-font-rgb));
+  line-height: calc((24 / 16) * 1rem);
+}
+
+article {
+  max-width: calc((500 / 16) * 1rem);
+  margin: 0 auto;
+  padding: 8vh 0 0;
+}
+
+header {
+  font-weight: var(--font-weight-medium);
+  font-size: calc((62 / 16) * 1rem);
+  text-indent: -4px; /* Plex 500 drifts to the right a bit */
+  line-height: 1.15;
+}
+
+p {
+  font-weight: var(--font-weight-light);
+  font-size: calc((18 / 16) * 1rem);
+  margin-top: calc((14 / 16) * 1rem);
+  margin-bottom: calc((14 / 16) * 1rem);
+}
+
+a {
+  display: inline-block;
+  color: rgb(var(--color-font-rgb));
+  text-decoration-thickness: calc((var(--text-decoration-thickness) / 16) * 1rem);
+  text-decoration-color: rgba(var(--color-font-rgb), var(--text-decoration-opacity));
+  text-underline-offset: calc((4 / 16) * 1rem);
+}
+
+a::first-letter,
+dd::first-letter {
+  text-shadow: -3px 0px 2px rgb(var(--color-font-accent-rgb));
+}
+
+a:hover,
+a:visited {
+  color: inherit;
+}
+
+strike {
+  text-decoration-thickness: calc((var(--text-decoration-thickness) / 16) * 1rem);
+  text-decoration-color: rgba(var(--color-font-rgb), var(--text-decoration-opacity));
+}
+
+aside {
+  font-weight: var(--font-weight-light);
+}
+
+dl {
+  color: rgba(var(--color-font-rgb), 0.5);
+  text-orientation: sideways-right;
+  writing-mode: vertical-lr;
+}
+
+dt {
+  text-transform: uppercase;
+  font-size: calc((8 / 16) * 1rem);
+  font-weight: var(--font-weight-medium);
+}
+
+dd {
+  margin-inline-start: 0;
+  margin: calc((8 / 16) * 1rem) 0;
+  font-size: calc((10 / 16) * 1rem);
+  text-decoration: underline 1px dotted rgb(var(--color-font-accent-rgb));
+  text-underline-offset: calc((4 / 16) * 1rem);
+}
+
+@media (min-width: 736px) {
+  body {
+    padding: 0;
+  }
+
+  aside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-right: 2px solid rgba(var(--color-font-rgb), 0.1);
+  }
+
+  dl {
+    display: flex;
+  }
+}
+
+@media (max-width: 736px) {
+  body {
+    padding: 0 calc((40 / 16) * 1rem);
+  }
+
+  aside {
+    max-width: calc((500 / 16) * 1rem);
+    margin: 0 auto;
+    padding: 8vh 0 5vh;
+  }
+
+  dl {
+    margin-bottom: 0;
+    margin-block-start: 0;
+  }
+
+  dd,
+  dt {
+    margin: 0;
+  }
+}
