@@ -21,9 +21,13 @@ Builds the app for production to the `build` folder.
 
 ### Deployment
 
-Deployment is handled by Github Actions. See `.github > workflows > deploy.yml` for steps.
+Deployment is handled by Github Actions.
 
-In general this should be
+[![deploy-prodution](https://github.com/Rjoss/rl.com/actions/workflows/deploy.yml/badge.svg?branch=production&event=push)](https://github.com/Rjoss/rl.com/actions/workflows/deploy.yml)
+
+See `.github > workflows > deploy.yml` for steps.
+
+In general this should look like:
 
 - Prep env variables in .env.production with values from the Github Action run
 - Build the app with `npm run build`
