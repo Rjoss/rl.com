@@ -1,4 +1,5 @@
 export function startFontLoadListener() {
+  const font = 'IBM Plex Mono';
   const intervalSpeed = 100;
   const maxWaitTime = 5000 / intervalSpeed;
   let elapsedTime = 0;
@@ -9,7 +10,7 @@ export function startFontLoadListener() {
     let hasLoaded = false;
 
     try {
-      hasLoaded = document.fonts.check('12px "IBM Plex Mono"');
+      hasLoaded = document.fonts.check(`12px "${font}"`);
     } catch (error) {
       console.info(`document.fonts API error: ${error}`);
       fontLoadListenerStop();
@@ -17,7 +18,7 @@ export function startFontLoadListener() {
     }
 
     if (elapsedTime > maxWaitTime) {
-      console.error(`document.fonts.check waited the max time for "IBM Plex Mono". Looks like you can't use this cool font :(`);
+      console.error(`document.fonts.check waited the max time for "${font}". Looks like you can't use this cool font :(`);
       fontLoadListenerStop();
     }
 

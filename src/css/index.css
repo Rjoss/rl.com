@@ -1,10 +1,6 @@
 :root {
   font-size: 16px;
 
-  /* font smoothing */
-  /* -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
-
   /* font family */
   --font-fam-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   --font-fam-default: 'IBM Plex Mono', Menlo, monospace;
@@ -14,9 +10,8 @@
   /* colors */
   --color-background-rgb: 0, 0, 0;
   --color-font-rgb: 255, 255, 255;
-  /* --color-font-accent-rgb: 191, 70, 251; */
   --color-font-accent-rgb: 11, 115, 113;
-  /* --color-font-accent-rgb: 19, 103, 191; */
+  --color-font-accent-complementary-rgb: 114, 95, 0;
 
   /* text decoration */
   --text-decoration-thickness: 1;
@@ -25,7 +20,7 @@
 
 ::selection {
   text-shadow: 2px 2px 1px rgb(var(--color-font-accent-rgb));
-  background-color: #725f00;
+  background-color: rgb(var(--color-font-accent-complementary-rgb));
 }
 
 /* energy */
@@ -157,8 +152,8 @@ dt {
 }
 
 dd {
-  margin-inline-start: 0;
-  margin: calc((8 / 16) * 1rem) 0;
+  margin-inline-start: calc((8 / 16) * 1rem);
+  margin-inline-end: calc((8 / 16) * 1rem);
   font-size: calc((10 / 16) * 1rem);
   text-decoration: underline 1px dotted rgb(var(--color-font-accent-rgb));
   text-underline-offset: calc((4 / 16) * 1rem);

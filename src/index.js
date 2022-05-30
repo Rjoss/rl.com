@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './css/index.css';
 import App from './App';
-import { startFontLoadListener } from './fontLoad';
-import reportWebVitals from './reportWebVitals';
+import { startFontLoadListener } from './js/fontLoad';
+import { startAnalytics } from './js/analytics';
+import reportWebVitals from './js/reportWebVitals';
 
+startAnalytics();
 startFontLoadListener();
 
 ReactDOM.createRoot(document.getElementsByTagName('body')[0]).render(
